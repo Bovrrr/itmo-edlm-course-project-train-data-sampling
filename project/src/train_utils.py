@@ -20,10 +20,6 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-# ---------------------------
-# 1. LOAD MODEL + TOKENIZER
-# ---------------------------
-
 def load_model(model_name: str, num_labels: int = 2):
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,
@@ -38,9 +34,6 @@ def load_tokenizer(model_name: str):
     return AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
 
 
-# ---------------------------
-# 2. BUILD DATALOADER
-# ---------------------------
 
 def build_dataloader(dataset, tokenizer, batch_size=32, shuffle=True):
 
@@ -65,10 +58,6 @@ def build_dataloader(dataset, tokenizer, batch_size=32, shuffle=True):
 
 
 
-# ---------------------------
-# 3. ONE TRAIN STEP
-# ---------------------------
-
 def train_epoch(model, train_loader, optimizer):
     model.train()
     total_loss = 0.0
@@ -83,10 +72,6 @@ def train_epoch(model, train_loader, optimizer):
 
     return total_loss / len(train_loader)
 
-
-# ---------------------------
-# 4. EVAL STEP
-# ---------------------------
 
 @torch.no_grad()
 def eval_epoch(model, val_loader, metric_acc, metric_f1):
@@ -114,9 +99,6 @@ def eval_epoch(model, val_loader, metric_acc, metric_f1):
     }
 
 
-# ---------------------------
-# 5. FULL TRAIN LOOP
-# ---------------------------
 
 def train_model(
     model_name: str,
